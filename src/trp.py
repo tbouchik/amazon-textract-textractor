@@ -268,7 +268,7 @@ class FieldValue:
     @property
     def text(self):
         return self._text
-    
+
     @property
     def block(self):
         return self._block
@@ -277,7 +277,8 @@ class Field:
     def __init__(self, block, blockMap):
         self._key = None
         self._value = None
-
+        boundingBox = block["Geometry"]["BoundingBox"]
+        self._boundingBox =  boundingBox
         for item in block['Relationships']:
             if(item["Type"] == "CHILD"):
                 self._key = FieldKey(block, item['Ids'], blockMap)
@@ -303,6 +304,10 @@ class Field:
     @property
     def key(self):
         return self._key
+
+    @property
+    def boundingBox(self):
+        return self._boundingBox
 
     @property
     def value(self):
@@ -332,7 +337,7 @@ class Form:
         if(key in self._fieldsMap):
             field = self._fieldsMap[key]
         return field
-    
+
     def searchFieldsByKey(self, key):
         searchKey = key.lower()
         results = []
@@ -650,4 +655,3 @@ class Document:
         if(self._blockMap and blockId in self._blockMap):
             block = self._blockMap[blockId]
         return block
-
